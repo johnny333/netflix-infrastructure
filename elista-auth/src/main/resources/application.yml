@@ -1,0 +1,26 @@
+spring:
+    profiles.active: local
+    application.name: Auth
+        
+
+eureka.instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap.instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+
+---
+spring:
+    profiles: docker
+server.port: 8080
+eureka.client.serviceUrl.defaultZone: http://discovery:8761/eureka/
+
+---
+spring:
+    profiles: local
+    
+server.port: 0
+
+eureka.client:
+    serviceUrl.defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 5
+

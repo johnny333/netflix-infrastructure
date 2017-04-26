@@ -1,0 +1,32 @@
+
+spring:
+    profiles.active: local
+    cloud.config.discovery.enabled: true
+    application.name: discovery
+
+eureka.client:
+    registerWithEureka: false
+    fetchRegistry: false
+
+  
+---
+spring:
+  profiles: local
+eureka:
+  instance:
+    hostname: localhost
+endpoints:
+  health:
+    sensitive: false
+
+server.port: 8761
+
+---
+spring:
+  profiles: docker
+eureka:
+  instance:
+    hostname: discovery
+
+server.port: 8761
+

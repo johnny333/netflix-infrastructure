@@ -1,0 +1,42 @@
+spring:
+
+    profiles.active: local
+    application.name: Zuul
+
+server.port: 8080
+
+zuul:
+  ignoredServices: '*'
+  routes:
+    auth:
+      path: /auth/**
+      serviceId: Auth
+    account:
+      path: /account/**
+      serviceId: Account
+    work:
+      path: /work/**
+      serviceId: Work
+    dictionaries:
+      path: /dictionaries/**
+      serviceId: Dictionaries
+    settings:
+      path: /settings/**
+      serviceId: Settings
+
+---
+spring:
+    profiles: local
+
+eureka.client:
+    serviceUrl.defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 5
+      
+---
+spring:
+    profiles: docker
+
+eureka.client:
+    serviceUrl.defaultZone: http://discovery:8761/eureka/
+    registry-fetch-interval-seconds: 5
+

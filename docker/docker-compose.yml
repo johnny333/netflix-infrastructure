@@ -1,0 +1,94 @@
+version: '2'
+
+services:
+  # --------------
+  # registry
+  # --------------
+  discovery:
+    build: ../elista-registry/target
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+  # --------------
+  # zuul proxy
+  # --------------
+  zuul:
+    build: ../elista-proxy/target
+    ports:
+      - "80:8080"
+    links:
+      - discovery
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # auth
+  # --------------
+  auth:
+    build: ../elista-auth/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # account
+  # --------------
+  account:
+    build: ../elista-account/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # work
+  # --------------
+  work:
+    build: ../elista-work/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # dictionaries
+  # --------------
+  dictionaries:
+    build: ../elista-dictionaries/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # settings
+  # --------------
+  settings:
+    build: ../elista-settings/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  db:
+    image: mongo
+    ports:
+      -   "27017:27017"
