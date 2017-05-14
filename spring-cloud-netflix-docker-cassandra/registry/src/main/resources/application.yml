@@ -1,0 +1,38 @@
+spring:
+    cloud.config.discovery.enabled: true
+    application.name: discovery
+server.port: 8761
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  
+---
+spring:
+  profiles: local
+eureka:
+  instance:
+    hostname: localhost
+endpoints:
+  health:
+    sensitive: false
+
+---
+spring:
+  profiles: dev
+eureka:
+  instance:
+    hostname: localhost
+endpoints:
+  health:
+    sensitive: false
+
+---
+spring:
+  profiles: docker
+eureka:
+  instance:
+    hostname: discovery
+

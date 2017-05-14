@@ -1,0 +1,41 @@
+server:
+    port: 8080
+    contextPath:
+
+management:
+  security.enabled: false
+  port: 9090
+  address: 127.0.0.1
+
+spring:
+  data:
+    rest:
+      base-path: /repos
+    jpa.repositories.enabled: true
+  http.multipart:
+    maxFileSize: 512MB
+    maxRequestSize: 512MB
+  mvc:
+    favicon.enabled: false
+  freemarker:
+      check-template-location: false
+  messages:
+      basename: messages
+  jpa.properties:
+    javax.persistence.sharedCache.mode: ENABLE_SELECTIVE
+    hibernate.cache.use_second_level_cache: true
+    hibernate.generate_statistics: false
+    hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+  application.name: User
+logging:
+  file: ./User.log
+eureka.instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap.instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+    statusPageUrl: https://${eureka.hostname}/info
+    healthCheckUrl: https://${eureka.hostname}/health
+    homePageUrl: https://${eureka.hostname}/
+eureka.client:
+    healthcheck:
+      enabled: true

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/proxy/proxy.iml" filepath="$PROJECT_DIR$/proxy/proxy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/registry/registry.iml" filepath="$PROJECT_DIR$/registry/registry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-app/user-app.iml" filepath="$PROJECT_DIR$/user-app/user-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-app/user-backend/user-backend.iml" filepath="$PROJECT_DIR$/user-app/user-backend/user-backend.iml" />
+    </modules>
+  </component>
+</project>

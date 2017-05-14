@@ -1,0 +1,32 @@
+spring:
+  profiles: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/vacation
+    driver-class-name: org.postgresql.Driver
+    username: vacation
+    password: vacation
+    tomcat:
+      validation-query: 'select 1'
+      test-on-borrow: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    database: POSTGRESQL
+    openInView: false
+    show_sql: false
+    generate-ddl: false
+    hibernate:
+     ddl-auto: validate
+    properties:
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: true
+  data:
+    jpa.repositories.enabled: true
+
+server.port: 8085
+
+eureka.client:
+    serviceUrl.defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 5
+
+

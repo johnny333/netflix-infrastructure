@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="elista-registry" />
+        <module name="proxy" />
+        <module name="registry" />
+        <module name="user-backend" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="elista-registry" target="1.8" />
+      <module name="proxy" target="1.8" />
+      <module name="registry" target="1.8" />
+      <module name="user-app" target="1.5" />
+      <module name="user-backend" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

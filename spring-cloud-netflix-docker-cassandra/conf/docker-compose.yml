@@ -1,0 +1,195 @@
+version: '2'
+
+services:
+  # --------------
+  # auth-db
+  # --------------
+  auth-db:
+    image: postgres:9.4.1
+    container_name: auth-db
+    hostname: auth-db
+    ports:
+      - '5431:5431'
+    environment:
+      - POSTGRES_PASSWORD=auth
+      - POSTGRES_USER=auth
+      - POSTGRES_DB=auth
+      - PGPORT=5431
+
+  # --------------
+  # employees-db
+  # --------------
+  employees-db:
+    image: postgres:9.4.1
+    container_name: employees-db
+    hostname: employees-db
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_PASSWORD=employees
+      - POSTGRES_USER=employees
+      - POSTGRES_DB=employees
+      - PGPORT=5432
+
+
+  # --------------
+  # medical_leave-db
+  # --------------
+  medical_leave-db:
+    image: postgres:9.4.1
+    container_name: medical_leave-db
+    hostname: medical_leave-db
+    ports:
+      - '5433:5433'
+    environment:
+      - POSTGRES_PASSWORD=medical_leave
+      - POSTGRES_USER=medical_leave
+      - POSTGRES_DB=medical_leave
+      - PGPORT=5433
+
+  # --------------
+  # timesheet-db
+  # --------------
+  timesheet-db:
+    container_name: timesheet-db
+    hostname: timesheet-db
+    image: postgres:9.4.1
+    ports:
+      - '5434:5434'
+    environment:
+      - POSTGRES_PASSWORD=timesheet
+      - POSTGRES_USER=timesheet
+      - POSTGRES_DB=timesheet
+      - PGPORT=5434
+
+  # --------------
+  # vacation-db
+  # --------------
+  vacation-db:
+    container_name: vacation-db
+    hostname: vacation-db
+    image: postgres:9.4.1
+    ports:
+      - '5435:5435'
+    environment:
+      - POSTGRES_PASSWORD=vacation
+      - POSTGRES_USER=vacation
+      - POSTGRES_DB=vacation
+      - PGPORT=5435
+
+  # --------------
+  # registry
+  # --------------
+  discovery:
+    build: ../registry/target
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # zuul proxy
+  # --------------
+  zuul:
+    build: ../proxy/target
+    ports:
+      - "80:8080"
+    links:
+      - discovery
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # vacation
+  # --------------
+  auth:
+    build: ../auth/auth-backend/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - auth-db:database
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # employees
+  # --------------
+  employees:
+    build: ../employees/employees-backend/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - employees-db:database
+    networks:
+      - esnet
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # medical_leave
+  # --------------
+  medical_leave:
+    build: ../medical_leave/medical_leave-backend/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - medical_leave-db:database
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # timesheet
+  # --------------
+  timesheet:
+    build: ../timesheet/timesheet-backend/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - timesheet-db:database
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  # --------------
+  # vacation
+  # --------------
+  vacation:
+    build: ../vacation/vacation-backend/target
+    ports:
+      - "8080"
+    links:
+      - discovery
+      - vacation-db:database
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+
+  elasticsearch:
+      image: elasticsearch:2.1.2
+      container_name: elasticsearch
+      environment:
+        - cluster.name=elista-employees
+        - bootstrap.memory_lock=true
+        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      ulimits:
+        memlock:
+          soft: -1
+          hard: -1
+        nofile:
+          soft: 65536
+          hard: 65536
+      mem_limit: 1g
+      cap_add:
+        - IPC_LOCK
+      ports:
+        - 9200:9200
+      networks:
+        - esnet
+
+
+networks:
+  esnet:
+    driver: bridge
